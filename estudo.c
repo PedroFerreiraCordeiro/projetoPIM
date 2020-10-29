@@ -50,6 +50,7 @@ typedef struct{
 	char cpf [SIZE];
 } Agenda ;
 
+
 void listaPaciente();
 void listaMedico();
 void listaFuncionario();
@@ -85,7 +86,7 @@ static Agenda agenda [50];
 
 
  void infoPaciente(Paciente paci){
-		printf("Codigo: %d \n Nome: %s \n CPF: %s \n Data de nascimento: %s \n Email: %s \n Endereco: %s \n Convenio: %s \n ", paci.codigo, paci.nome, paci.cpf, paci.dataNascimento, paci.email, paci.endereco, paci.convenio);
+	printf("Codigo: %d \n Nome: %s \n CPF: %s \n Data de nascimento: %s \n Email: %s \n Endereco: %s \n Convenio: %s \n ", paci.codigo, paci.nome, paci.cpf, paci.dataNascimento, paci.email, paci.endereco, paci.convenio);
 }void infoMedico(Medico medi){
 	printf("Codigo: %d \n Nome: %s \n CPF: %s \n Data de nascimento: %s \n Email: %s \n Unidade: %s \n CRM: %s \n Especialidade: %s \n ", medi.codigomed,medi.nome, medi.cpf, medi.dataNascimento, medi.email, medi.unidade, medi.crm, medi.especialidade);
 }void infoFuncionario(Funcionario funci){
@@ -155,6 +156,7 @@ void menu(){
 
 	void login(){
 	char c;
+	
        char login[20];
        char senha[20];
        int a=10;
@@ -162,20 +164,20 @@ void menu(){
        int verifica_senha=0;
        while(verifica_senha==0){
        printf("\n\t\tMedLife Login\n\n Usuario: ");
-       //fflush(stdin);  //Limpando o buffer do teclado
+       fflush(stdin);  //Limpando o buffer do teclado
        gets(login);
        printf("\n Senha: ");
-       while((c=getch())!=13){ //13 é o valor de ENTER na tabela ASCII
+       while((c=getch())!=13){ //13 é o valor da tabela ascii
        senha[i]=c;
        i++;
-       printf("*");      //imprime o * Anterisco
+       printf("*");      //vai imprimir o asterisco
        }
 	       senha[i]='\0';
 	       i=0;
 	       system("cls");
 	       a= strcmp(senha,""); //
 	       if(a==0){printf("SENHA CORRETA");system("color 0a");verifica_senha=1;Beep(1500,2000);}
-	       else{printf("%s SENHA ERRADA\n",senha);system("color 0c");Beep(1200,200);}
+	       else{printf("SENHA DIGITADA ERRADA\n",senha);system("color 0c");Beep(1200,200);}
 	       printf("\n");
 	       system("pause");
 			menu();
@@ -212,11 +214,9 @@ void menu(){
 					case 4:	
 						cadastrarAgendamento();
 						break;
-					case 5:
-						printf("==============MedLife===========\n");
-						printf("Volte sempre \n");
+					case 5:			
 						Sleep(2);
-						exit(0);
+						menu();
 				  	default:
 				   		printf("Opcao invalida. \n");
 						Sleep(2);
@@ -293,36 +293,52 @@ void cadastrarMedico(){
 }
 
 void cadastrarFuncionarios(){
-	
+	FILE* arq;
+
 	printf("\n\t\tMedLife Cadastro de Funcionarios\n\n");
 	printf("\t==========================\n");
 	
+	arq = fopen("cadastrofunci.txt", "a");
+	if (arq){
 	printf("\nDigite o nome completo do funcionario: \n");
 	fgets(funcionario[contador_funcionario].nome, 30, stdin);
+	fputs(funcionario[contador_funcionario].nome, arq);
 	
 	printf("\nDigite o CPF do funcionario: \n");
 	fgets(funcionario[contador_funcionario].cpf, 30, stdin);
+	fputs(funcionario[contador_funcionario].cpf, arq);
 	
 	printf("\nDigite a data de nascimento: \n");
 	fgets(funcionario[contador_funcionario].dataNascimento, 30, stdin);
+	fputs(funcionario[contador_funcionario].dataNascimento, arq);
 	
 	printf("\nDigite o email: \n");
 	fgets(funcionario[contador_funcionario].email, 30, stdin);
+	fputs(funcionario[contador_funcionario].email, arq);
 	
 	printf("\nDigite a unidade: \n");
 	fgets(funcionario[contador_funcionario].unidade, 30, stdin);
+	fputs(funcionario[contador_funcionario].unidade, arq);
 	
 	printf("\nDigite a matricula \n");
 	fgets(funcionario[contador_funcionario].matricula, 30, stdin);
+	fputs(funcionario[contador_funcionario].matricula, arq);
 	
 	printf("\nDigite o departamento \n");
 	fgets(funcionario[contador_funcionario].departamento, 30, stdin);
+	fputs(funcionario[contador_funcionario].departamento, arq);
 		
 	printf("\n%s Obrigado por se cadastrar! Seu cadastro foi feito com sucesso. Bem vindo(a)! \n", (funcionario[contador_funcionario].nome, "\n"));
+		
+	}else{
+		printf("Nao foi possivel criar o arquivo. \n");
+	}
+	
+	
 	
 	funcionario[contador_funcionario].codigofunci= (contador_funcionario +1);
 	contador_funcionario++;
-	
+	fclose(arq);
 	menu();
 }
 
@@ -369,6 +385,7 @@ void consultas(){
 	printf("3- Consulta de funcionarios\n");
 	printf("4- Consulta de Agendamentos\n");	
 	printf("5- Voltar ao menu\n");
+	printf("Digite aqui: ");
 	
 		int escolha;
 		scanf("%d", &escolha);
@@ -389,10 +406,8 @@ void consultas(){
 				listaAgendamento();
 				break;
 			case 5:
-				printf("==============MedLife===========\n");
-				printf("Volte sempre \n");
 				Sleep(2);
-				exit(0);
+				menu();
 		  	default:
 		   		printf("Opcao invalida. \n");
 				Sleep(2);
@@ -404,6 +419,8 @@ void consultas(){
 }
 
 void listaPaciente(){	
+
+		
 		int i=0;
 		printf("\t-----------MedLife-------------\n");
 		printf("Lista de Pacientes: \n");	
@@ -415,6 +432,33 @@ void listaPaciente(){
 	     }
 			}else{
 			printf("Nao temos ainda Pacientes cadastrados. \n");
+			
+			}
+		
+		printf("\nDigite a opcao desejada: Voltar ao menu [1] Voltar a consulta [2] Sair do programa [3] \n");
+		printf("\nDigite aqui: ");
+			
+			int escolha;
+			scanf("%d",&escolha);
+			getchar();
+			system("cls");
+			
+			switch(escolha) {
+			case 1:
+				menu();
+				break;
+			case 2:
+				consultas();
+				break;
+			case 3:
+				printf("Volte sempre! ");
+				Sleep(2);
+				exit(0);
+			default:
+				printf("Opcao invalida. \n");
+				Sleep(2);
+				listaPaciente();
+				break;
 		}
 	}
 
@@ -431,21 +475,100 @@ void listaMedico(){
 			}else{
 			printf("Nao temos ainda Medicos cadastrados. \n");
 	 }
+	 
+	 	printf("\nDigite a opcao desejada: Voltar ao menu [1] Voltar a consulta [2] Sair do programa [3] \n");
+		printf("\nDigite aqui: ");
+			
+			int escolha;
+			scanf("%d",&escolha);
+			getchar();
+			system("cls");
+			
+			switch(escolha) {
+			case 1:
+				menu();
+				break;
+			case 2:
+				consultas();
+				break;
+			case 3:
+				printf("Volte sempre! ");
+				Sleep(2);
+				exit(0);
+			default:
+				printf("Opcao invalida. \n");
+				Sleep(2);
+				listaMedico();
+				break;
+		}
 }
 
 void listaFuncionario(){
+		
+		FILE* leitura;
+		
+		
 		int i=0;
 		printf("\t-----------MedLife-------------\n");
 		printf("Lista de Funcionarios: \n");	
-		if(contador_funcionario > 0){
+		    
+	   	leitura = fopen("cadastrofunci.txt", "rb");
+		
+		if(leitura == NULL){
+			printf("Nao temos cadastro de funcionarios. \n");
+			getchar;
+			exit(0);
+		}/*
+		else{
+			while(fread(&funci, sizeof(),1, leitura)==1 ){
+			getchar;
+			exit(0);
+			}
+			
+		}	fclose(leitura);
+		*/
+		if(contador_funcionario> 0) {
 		 for( i= 0; i < contador_funcionario; i++){
 		 infoFuncionario(funcionario[i]);
 		 printf("----------------------");
 		 Sleep(1);		
-	     }
-			}else{
-			printf("Nao temos ainda produtos cadastrados. \n");
-    }
+					
+				
+			}
+	 }  
+	
+		 
+
+			
+
+			
+			
+    printf("\nDigite a opcao desejada: Voltar ao menu [1] Voltar a consulta [2] Sair do programa [3] \n");
+		printf("\nDigite aqui: ");
+			
+			int escolha;
+			scanf("%d",&escolha);
+			getchar();
+			system("cls");
+			
+			switch(escolha) {
+			case 1:
+				menu();
+				break;
+			case 2:
+				consultas();
+				break;
+			case 3:
+				printf("Volte sempre! ");
+				Sleep(2);
+				exit(0);
+			default:
+				printf("Opcao invalida. \n");
+				Sleep(2);
+				listaFuncionario();
+				break;
+}
+
 }
 	
 void listaAgendamento(){
@@ -461,6 +584,34 @@ void listaAgendamento(){
 		}else{
 		printf("\nNao temos ainda agendas marcadas. \n");
 	}	
+	
+	printf("\nDigite a opcao desejada: Voltar ao menu [1] Voltar a consulta [2] Sair do programa [3] \n");
+		printf("\nDigite aqui: ");
+			
+			int escolha;
+			scanf("%d",&escolha);
+			getchar();
+			system("cls");
+			
+			switch(escolha) {
+			case 1:
+				menu();
+				break;
+			case 2:
+				consultas();
+				break;
+			case 3:
+				printf("Volte sempre! ");
+				Sleep(2);
+				exit(0);
+			default:
+				printf("Opcao invalida. \n");
+				Sleep(2);
+				listaAgendamento();
+				break;
+	
+}
+
 }
 
 void informacoes(){
