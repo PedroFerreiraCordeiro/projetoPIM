@@ -1,0 +1,23 @@
+# depslib dependency file v1.0
+1606436702 source:c:\users\maiic\documents\unip\clinica pim\clinica-pim\main.c
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<unistd.h>
+	<windows.h>
+	<conio.h>
+	<locale.h>
+	"funcs.h"
+
+1606435483 c:\users\maiic\documents\unip\clinica pim\clinica-pim\funcs.h
+
+1606438456 source:c:\users\maiic\documents\unip\clinica pim\clinica-pim\funcs.c
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<unistd.h>
+	<windows.h>
+	<conio.h>
+	<time.h>
+	"funcs.h"
+
